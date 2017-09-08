@@ -1,4 +1,4 @@
-# Copyright 2016 Google Inc.
+# Copyright 2016 Google Inc. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,15 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import webapp2
-import os #added
-from google.appengine.ext.webapp import template
+import webtest
 
-class MainPage(webapp2.RequestHandler):
-    def get(self):
-	path = os.path.join(os.path.dirname(__file__), './homepage.html') 
-        self.response.out.write(template.render(path, {})) 
+import main
 
-app = webapp2.WSGIApplication([
-    ('/', MainPage),
-], debug=True)
+
+def test_get():
+    app = webtest.TestApp(main.app)
+
+    response = app.get('/')
+
+    assert response.status_int == 200
+    assert response.body == 'Hello, World!'
